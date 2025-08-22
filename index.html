@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ABSEN STARZERO</title>
+</head>
+<body>
+    <h2>ABSEN STARZERO</h2>
+    <form id="absenForm">
+        <label for="nama">Nama:</label><br>
+        <input type="text" id="nama" name="nama" required><br><br>
+
+        <label for="nomor">Nomor:</label><br>
+        <input type="text" id="nomor" name="nomor" required><br><br>
+
+        <label for="linkTT">Link TT:</label><br>
+        <input type="url" id="linkTT" name="linkTT" required><br><br>
+
+        <button type="button" onclick="simpanData()">Submit</button>
+    </form>
+
+    <script>
+        async function simpanData() {
+            var nama = document.getElementById("nama").value;
+            var nomor = document.getElementById("nomor").value;
+            var linkTT = document.getElementById("linkTT").value;
+
+            if (nama === "" || nomor === "" || linkTT === "") {
+                alert("Semua kolom wajib diisi!");
+                return;
+            }
+
+            var data = {
+                nama: nama,
+                nomor: nomor,
+                linkTT: linkTT
+            };
+
+            try {
+                const response = await fetch('/simpan-absen', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Data berhasil disimpan ke dalam file PDF!');
+                    document.getElementById("absenForm").reset();
+                } else {
+                    alert('Terjadi kesalahan saat menyimpan data.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan: ' + error);
+            }
+        }
+    </script>
+</body>
+</html>
